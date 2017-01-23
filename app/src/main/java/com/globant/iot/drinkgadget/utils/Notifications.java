@@ -10,13 +10,17 @@ import com.globant.iot.drinkgadget.Main;
 import com.globant.iot.drinkgadget.R;
 
 public class Notifications {
-    public static void showNotification(Context context, String title, String message)
-    {
+
+    private Notifications() {
+        // Prevent instantiation
+    }
+
+    public static void showNotification(Context context, String title, String message) {
         NotificationCompat.Builder builder =
                 new NotificationCompat.Builder(context)
                         .setSmallIcon(R.drawable.ic_fingerprint_black_24dp)
                         .setContentTitle(title)
-                        .setVibrate(new long[] { 1000, 1000, 1000, 1000, 1000 })
+                        .setVibrate(new long[] {1000, 1000, 1000, 1000, 1000 })
                         .setContentText(message);
 
         Intent notificationIntent = new Intent(context, Main.class);

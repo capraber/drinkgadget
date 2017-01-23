@@ -3,6 +3,7 @@ package com.globant.iot.drinkgadget.mvp.presenter;
 import com.globant.iot.drinkgadget.R;
 import com.globant.iot.drinkgadget.mvp.model.ScanModel;
 import com.globant.iot.drinkgadget.mvp.view.ScanView;
+import com.globant.iot.drinkgadget.utils.DrinkPreferences;
 import com.globant.iot.drinkgadget.utils.Notifications;
 import com.punchthrough.bean.sdk.Bean;
 import com.punchthrough.bean.sdk.BeanDiscoveryListener;
@@ -18,19 +19,22 @@ import java.util.List;
 
 public class ScanPresenter {
 
+    public static final int BYTE = 1024;
+    public static final int TIMEOUT = 5;
     private ScanModel model;
     private ScanView view;
     final List<Bean> beans = new ArrayList<>();
-    boolean notification_sent;
-    int rx_index = 0;
+    boolean notificationSent;
+    int rxIndex = 0;
     boolean connected = false;
-    byte[] rx_data = new byte[1024];
-    byte temperatureSelected = 4;
+    byte[] rxData = new byte[BYTE];
+    private DrinkPreferences preferences;
 
-    public ScanPresenter(ScanModel model, ScanView view) {
+    public ScanPresenter(ScanModel model, ScanView view, DrinkPreferences preferences) {
 
         this.model = model;
         this.view = view;
+        this.preferences = preferences;
         init();
     }
 
@@ -40,7 +44,7 @@ public class ScanPresenter {
         view.hideSpinner();
         view.hideTemperature();
         view.hideBattery();
-        notification_sent = false;
+        notificationSent = false;
     }
 
     public void initSearch() {
@@ -55,16 +59,15 @@ public class ScanPresenter {
                 //System.out.println("Encontrado uno!!!");
 
                 //add bean if not yet included
-                boolean new_bean = true;
-                for(int c = 0; c < beans.size(); c++) {
-                    if(beans.get(c).getDevice().getAddress().equals(bean.getDevice().getAddress())) {
-                        new_bean = false;
+                boolean newBean = true;
+                for (int c = 0; c < beans.size(); c++) {
+                    if (beans.get(c).getDevice().getAddress().equals(bean.getDevice().getAddress())) {
+                        newBean = false;
                         break;
                     }
                 }
 
-                if(new_bean)
-                {
+                if (newBean) {
                     beans.add(bean);
                     System.out.println("Encontrado uno!!!");
                 }
@@ -81,10 +84,9 @@ public class ScanPresenter {
                 }
 
                 //connect to first one detected
-                if(beans.size() > 0) {
+                if (beans.size() > 0) {
                     connect();
-                }
-                else {
+                } else {
                     //reset
                     init();
                     view.showPopup(view.getActivity().getString(R.string.error_message));
@@ -94,18 +96,17 @@ public class ScanPresenter {
 
 
 
-        BeanManager.getInstance().setScanTimeout(5);  // Timeout in seconds, optional, default is 30 seconds
+        BeanManager.getInstance().setScanTimeout(TIMEOUT);  // Timeout in seconds, optional, default is 30 seconds
         BeanManager.getInstance().startDiscovery(listener);
 
     }
 
-    private void connect()
-    {
+    private void connect() {
         // Assume we have a reference to the 'beans' ArrayList from above.
-        final Bean bean = beans.get(0);//[0];
+        final Bean bean = beans.get(0); //[0];
 
         //clear rx data
-        rx_index = 0;
+        rxIndex = 0;
 
         BeanListener beanListener = new BeanListener() {
 
@@ -145,33 +146,28 @@ public class ScanPresenter {
             }
 
             @Override
-            public void onSerialMessageReceived(byte[] data)
-            {
+            public void onSerialMessageReceived(byte[] data) {
                 System.out.println("onSerialMessageReceived");
                 //System.out.println("Longitud del mensaje " + data.length);
 
 
-                for(int c=0;c< data.length;c++)
-                {
-                    rx_data[rx_index++] = data[c];
-                    if(2 == rx_index)
-                    {
+                for (int c = 0; c < data.length; c++) {
+                    rxData[rxIndex++] = data[c];
+                    if (2 == rxIndex) {
                         //get temperature
-                        System.out.println("Temperature: " + Byte.toString(rx_data[0]));
+                        System.out.println("Temperature: " + Byte.toString(rxData[0]));
                         //get battery level %
-                        System.out.println("Battery: " + Byte.toString(rx_data[1]));
-                        rx_index = 0;
-                        byte temperature = rx_data[0];
-                        byte battery_level = rx_data[1];
-                        updateViewInfo(temperature, battery_level);
+                        System.out.println("Battery: " + Byte.toString(rxData[1]));
+                        rxIndex = 0;
+                        byte temperature = rxData[0];
+                        byte batteryLevel = rxData[1];
+                        updateViewInfo(temperature, batteryLevel);
 
-                        if(!notification_sent)
-                        {
-                            if(temperature <= temperatureSelected)
-                            {
+                        if (!notificationSent) {
+                            if (temperature <= preferences.getNotificationTemperature()) {
                                 Notifications.showNotification(view.getContext(), view.getActivity().getString(R.string.drink_widget),
                                         view.getActivity().getString(R.string.ready_message));
-                                notification_sent = true;
+                                notificationSent = true;
                             }
                         }
                         break;
@@ -182,14 +178,12 @@ public class ScanPresenter {
             }
 
             @Override
-            public void onScratchValueChanged(ScratchBank bank, byte[] value)
-            {
+            public void onScratchValueChanged(ScratchBank bank, byte[] value) {
                 System.out.println("onScratchValueChanged");
             }
 
             @Override
-            public void onError(BeanError error)
-            {
+            public void onError(BeanError error) {
                 System.out.println("onError");
             }
 
@@ -205,11 +199,10 @@ public class ScanPresenter {
         bean.connect(view.getActivity(), beanListener);
     }
 
-    private void updateViewInfo(byte temperature, byte battery_level)
-    {
+    private void updateViewInfo(byte temperature, byte batteryLevel) {
         view.setTemperature(temperature);
-        view.setBattery(battery_level);
+        view.setBattery(batteryLevel);
         view.setCircleViewTemperature(temperature);
-        view.setCircleViewBatteryLevel(battery_level);
+        view.setCircleViewBatteryLevel(batteryLevel);
     }
 }

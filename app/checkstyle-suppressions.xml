@@ -1,0 +1,15 @@
+<?xml version="1.0"?>
+<!DOCTYPE suppressions PUBLIC
+    "-//Puppy Crawl//DTD Suppressions 1.1//EN"
+    "http://www.puppycrawl.com/dtds/suppressions_1_1.dtd">
+<suppressions>
+    <suppress checks="." files=".*Test.java" />
+    <!--<suppress checks="MagicNumberCheck" files="EndoDefinition.java" />-->
+    <!--<suppress checks="MagicNumberCheck" files="SchemeDefinition.java" />-->
+    <!--<suppress checks="MagicNumberCheck" files="FrameDefinitionG1V1.java" />-->
+    <!--<suppress checks="FinalClass" files="EndoDefinition.java" />-->
+    <!--<suppress checks="UnusedImports" files="ImmersiveDialog.java" />-->
+    <!--<suppress checks="MethodLength" files="HomeActivity.java" />-->
+    <suppress checks="InterfaceIsType" files="SupportPatientTypeEnum.java" />
+
+</suppressions>

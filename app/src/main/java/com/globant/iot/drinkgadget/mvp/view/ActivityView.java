@@ -2,30 +2,27 @@ package com.globant.iot.drinkgadget.mvp.view;
 
 import android.app.ProgressDialog;
 import android.content.Context;
-import android.content.res.Resources;
 import android.support.annotation.Nullable;
+import android.support.v7.app.AppCompatActivity;
 
 import java.lang.ref.WeakReference;
 
-public class ActivityView <T> {
-    private WeakReference<T> activityRef;
+public class ActivityView {
+    private WeakReference<AppCompatActivity> activityRef;
     private ProgressDialog progressDialog;
 
-    public ActivityView(T activity) {
+    public ActivityView(AppCompatActivity activity) {
         activityRef = new WeakReference<>(activity);
     }
 
     @Nullable
-    public T getActivity() {
+    public AppCompatActivity getActivity() {
         return activityRef.get();
     }
 
     @Nullable
     public Context getContext() {
-        return (Context) getActivity();
+        return getActivity();
     }
 
-    public Resources getResources() {
-        return getContext().getResources();
-    }
 }

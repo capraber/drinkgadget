@@ -8,33 +8,38 @@ import android.widget.Toast;
 
 import com.globant.iot.drinkgadget.Main;
 import com.globant.iot.drinkgadget.R;
+import com.globant.iot.drinkgadget.utils.DrinkPreferences;
+import com.globant.iot.drinkgadget.utils.Utils;
 
 import at.grabner.circleprogress.CircleProgressView;
 import butterknife.BindView;
 import butterknife.ButterKnife;
 
-public class ScanView extends ActivityView<Main> {
+public class ScanView extends ActivityView {
 
+    public static final int TEMP_MAX_VALUE = 100;
+    public static final int BATTERY_MAX_VALUE = 100;
     @BindView(R.id.buttonSearch) Button searchBtn;
     @BindView(R.id.progressBar) ProgressBar spinner;
     @BindView(R.id.circleViewTemperature) CircleProgressView mCircleViewTemperature;
     @BindView(R.id.circleViewBatteryLevel) CircleProgressView mCircleViewBatteryLevel;
     @BindView(R.id.textViewTemperature) TextView tempText;
     @BindView(R.id.textViewBatteryLevel) TextView batteryText;
-    boolean convertToFahrenheit = !true;
+    private DrinkPreferences preferences;
 
-    public ScanView(Main activity) {
+    public ScanView(Main activity, DrinkPreferences preferences) {
         super(activity);
         ButterKnife.bind(this, activity);
+        this.preferences = preferences;
 
         //circles
-        mCircleViewTemperature.setMaxValue(100);
+        mCircleViewTemperature.setMaxValue(TEMP_MAX_VALUE);
         //mCircleViewTemperature.setMinValue(-10);
         mCircleViewTemperature.setValue(0);
-        mCircleViewTemperature.setUnit("°C");
+        mCircleViewTemperature.setUnit(activity.getString(R.string.celsius));
         mCircleViewTemperature.setUnitVisible(false);
 
-        mCircleViewBatteryLevel.setMaxValue(100);
+        mCircleViewBatteryLevel.setMaxValue(BATTERY_MAX_VALUE);
         mCircleViewBatteryLevel.setValue(0);
         mCircleViewBatteryLevel.setUnit("%");
     }
@@ -77,32 +82,34 @@ public class ScanView extends ActivityView<Main> {
 
     public void setTemperature(byte temperature) {
         //update temperature info
-        tempText.setText(Byte.toString(temperature) + "°C");
+        if (preferences.isCelsius()) {
+            tempText.setText(Byte.toString(temperature) + getActivity().getString(R.string.celsius));
+        }  else {
+            tempText.setText(Byte.toString(Utils.convertToFahrenheit(temperature)) + getActivity().getString(R.string.fahrenheit));
+        }
     }
 
-    public void setBattery(byte battery_level) {
+    public void setBattery(byte batteryLevel) {
         //update battery level info
-        batteryText.setText(Byte.toString(battery_level) + "%");
+        batteryText.setText(Byte.toString(batteryLevel) + "%");
     }
 
     public void setCircleViewTemperature(byte temperature) {
-        if(convertToFahrenheit) {
-            mCircleViewTemperature.setUnit("°F");
-            temperature = (byte)(1.8 * (float)temperature + 32);
-        }
-        else {
-            mCircleViewTemperature.setUnit("°C");
+        if (preferences.isCelsius()) {
+            mCircleViewTemperature.setUnit(getActivity().getString(R.string.celsius));
+        }  else {
+            mCircleViewTemperature.setUnit(getActivity().getString(R.string.fahrenheit));
+            temperature = Utils.convertToFahrenheit(temperature);
         }
         mCircleViewTemperature.setUnitVisible(true);
         mCircleViewTemperature.setValue(temperature);
     }
 
-    public void setCircleViewBatteryLevel(byte battery_level) {
-        mCircleViewBatteryLevel.setValue(battery_level);
+    public void setCircleViewBatteryLevel(byte batteryLevel) {
+        mCircleViewBatteryLevel.setValue(batteryLevel);
     }
 
-    public void showPopup(String message)
-    {
+    public void showPopup(String message) {
         Toast.makeText(getContext(), message,
                 Toast.LENGTH_LONG).show();
     }

@@ -8,4 +8,12 @@
         <item name="colorAccent">@color/colorAccent</item>
     </style>
 
+    <style name="AppTheme.DrawerTitle" parent="@android:style/Widget.TextView">
+        <item name="android:textSize">14sp</item>
+        <item name="android:layout_marginTop">25sp</item>
+        <item name="android:layout_marginBottom">15sp</item>
+        <item name="android:layout_marginLeft">15sp</item>
+        <item name="android:textColor">#fff</item>
+    </style>
+
 </resources>
