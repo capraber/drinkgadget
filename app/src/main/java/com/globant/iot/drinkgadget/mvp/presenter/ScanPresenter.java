@@ -21,14 +21,14 @@ public class ScanPresenter {
 
     public static final int BYTE = 1024;
     public static final int TIMEOUT = 5;
-    private ScanModel model;
-    private ScanView view;
     final List<Bean> beans = new ArrayList<>();
     boolean notificationSent;
     int rxIndex = 0;
     boolean connected = false;
     byte[] rxData = new byte[BYTE];
     private DrinkPreferences preferences;
+    private ScanModel model;
+    private ScanView view;
 
     public ScanPresenter(ScanModel model, ScanView view, DrinkPreferences preferences) {
 
@@ -40,16 +40,35 @@ public class ScanPresenter {
 
     private void init() {
         beans.clear();
-        view.showSearchBtn();
         view.hideSpinner();
         view.hideTemperature();
         view.hideBattery();
         notificationSent = false;
+        checkPermission();
+    }
+
+    private boolean checkPermission() {
+        if (!model.hasBluetoothEnabled()) {
+            view.showPopup(view.getActivity().getString(R.string.error_bluetooth_message));
+            return false;
+        }
+
+        if (!model.checkLocationPermission(view.getActivity())) {
+            view.requestLocationPermission();
+            return false;
+        }
+
+        return true;
     }
 
     public void initSearch() {
+        if (!checkPermission()) {
+            return;
+        }
         //FIXME: ver bien el tema si no esta conectado el blu tooth porq se cuelgA!!!!
         view.hideSearchBtn();
+        view.showRibbon();
+        view.showRecyclerView();
         view.showSpinner();
 
         BeanDiscoveryListener listener = new BeanDiscoveryListener() {
@@ -76,6 +95,25 @@ public class ScanPresenter {
 
             @Override
             public void onDiscoveryComplete() {
+//TODO hardcoding
+                //TODO hardcoding
+                com.globant.iot.drinkgadget.model.DeviceInfo info = new com.globant.iot.drinkgadget.model.DeviceInfo();
+                info.name = "device 1";
+                info.address = "B4:99:4C:1E:BC:75";
+                info.status = 1;
+                view.addWidgetDetected(info);
+                info = new com.globant.iot.drinkgadget.model.DeviceInfo();
+                info.name = "device 2";
+                info.address = "B4:99:4C:1E:BC:75";
+                info.status = 0;
+                view.addWidgetDetected(info);
+                info = new com.globant.iot.drinkgadget.model.DeviceInfo();
+                info.name = "device 3";
+                info.address = "B4:99:4C:1E:BC:75";
+                info.status = 0;
+                view.addWidgetDetected(info);
+
+
                 // This is called when the scan times out, defined by the .setScanTimeout(int seconds) method
 
                 for (Bean bean : beans) {
@@ -93,7 +131,6 @@ public class ScanPresenter {
                 }
             }
         };
-
 
 
         BeanManager.getInstance().setScanTimeout(TIMEOUT);  // Timeout in seconds, optional, default is 30 seconds
