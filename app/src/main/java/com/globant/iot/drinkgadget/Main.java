@@ -46,7 +46,7 @@ public class Main extends DrawerBaseActivity {
         BusProvider.register(presenter);
     }
 
-    @OnClick(R.id.buttonSearch)
+    @OnClick(R.id.scanFloatingButton)
     public void onButonSearchClick() {
         presenter.initSearch();
     }

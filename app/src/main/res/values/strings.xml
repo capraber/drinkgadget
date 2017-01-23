@@ -1,6 +1,6 @@
 <resources>
     <string name="app_name">Drink Gadget</string>
-    <string name="error_message">No widgets detected. Check that Bluetooth is enabled.</string>
+    <string name="error_message">No widgets detected.</string>
     <string name="widget_disconnected">Widget disconnected</string>
     <string name="drink_widget">Drink Widget</string>
     <string name="ready_message">Your drink is ready! Enjoy it!</string>
@@ -13,4 +13,7 @@
     <string name="please_select_your_settings">Please select your settings</string>
     <string name="select_when_the_drink_is_ready_for_you">Select when the drink is ready for you.</string>
     <string name="version">Version %1$s</string>
+    <string name="error_bluetooth_message">Check that Bluetooth is enabled.</string>
+    <string name="widgets_detected">Drinks detected</string>
+
 </resources>
