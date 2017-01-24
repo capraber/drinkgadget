@@ -20,7 +20,10 @@ android {
         debug {
             debuggable true
         }
+        mock.initWith(buildTypes.debug)
+
         mock {
+            debuggable true
         }
     }
 }

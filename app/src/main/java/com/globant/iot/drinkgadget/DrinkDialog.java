@@ -10,6 +10,7 @@ import com.globant.iot.drinkgadget.mvp.presenter.DrinkDialogPresenter;
 import com.globant.iot.drinkgadget.mvp.view.DrinkDialogView;
 import com.globant.iot.drinkgadget.utils.BusProvider;
 import com.globant.iot.drinkgadget.utils.DrinkPreferences;
+import com.globant.iot.drinkgadget.utils.MockBeanManager;
 
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -20,14 +21,10 @@ import static com.globant.iot.drinkgadget.DrawerBaseActivity.DRINK_PREFERENCES;
 public class DrinkDialog extends Dialog {
     private DrinkDialogPresenter presenter;
     private DeviceInfo device;
-    private byte temperature;
-    private byte batteryLevel;
 
-    public DrinkDialog(Context context, DeviceInfo device, byte temperature, byte batteryLevel) {
+    public DrinkDialog(Context context, DeviceInfo device) {
         super(context);
         this.device = device;
-        this.temperature = temperature;
-        this.batteryLevel = batteryLevel;
     }
 
     @Override
@@ -38,8 +35,12 @@ public class DrinkDialog extends Dialog {
         setTitle(null);
         setCancelable(false);
 
-        presenter = new DrinkDialogPresenter(new DrinkDialogView(this), new DrinkDialogModel(device,  temperature,  batteryLevel),
+        presenter = new DrinkDialogPresenter(new DrinkDialogView(this), new DrinkDialogModel(device),
                 new DrinkPreferences(getContext().getSharedPreferences(DRINK_PREFERENCES, MODE_PRIVATE)));
+        if (BuildConfig.BUILD_TYPE.equals("mock")) {
+            new MockBeanManager().start(device.address);
+        }
+
     }
 
 

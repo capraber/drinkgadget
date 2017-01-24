@@ -44,4 +44,7 @@ public class ScanModel {
     }
 
 
+    public void cleanBeans() {
+        beans.clear();
+    }
 }

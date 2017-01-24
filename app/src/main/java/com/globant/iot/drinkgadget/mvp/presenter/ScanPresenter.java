@@ -2,6 +2,7 @@ package com.globant.iot.drinkgadget.mvp.presenter;
 
 import android.app.Activity;
 
+import com.globant.iot.drinkgadget.BuildConfig;
 import com.globant.iot.drinkgadget.R;
 import com.globant.iot.drinkgadget.listeners.DiscoveryListener;
 import com.globant.iot.drinkgadget.model.DeviceInfo;
@@ -11,7 +12,6 @@ import com.globant.iot.drinkgadget.mvp.events.BeanDiscoveredEvent;
 import com.globant.iot.drinkgadget.mvp.events.DiscoveryCompleteEvent;
 import com.globant.iot.drinkgadget.mvp.model.ScanModel;
 import com.globant.iot.drinkgadget.mvp.view.ScanView;
-import com.globant.iot.drinkgadget.utils.DrinkPreferences;
 import com.punchthrough.bean.sdk.Bean;
 import com.punchthrough.bean.sdk.BeanManager;
 import com.squareup.otto.Subscribe;
@@ -22,15 +22,13 @@ public class ScanPresenter {
 
     public static final int TIMEOUT = 5;
     boolean notificationSent;
-    private DrinkPreferences preferences;
     private ScanModel model;
     private ScanView view;
 
-    public ScanPresenter(ScanModel model, ScanView view, DrinkPreferences preferences) {
+    public ScanPresenter(ScanModel model, ScanView view) {
 
         this.model = model;
         this.view = view;
-        this.preferences = preferences;
         init();
     }
 
@@ -83,12 +81,7 @@ public class ScanPresenter {
     @Subscribe
     public void onBeanConnected(BeanConnectedEvent event) {
         DeviceInfo info = new DeviceInfo.Builder().add(event.bean.getDevice()).build();
-
         view.addWidgetDetected(info);
-        //enable info container (TBD)
-//        view.showTemperature();
-//        view.showBattery();
-
     }
 
     @Subscribe
@@ -96,23 +89,43 @@ public class ScanPresenter {
         view.showPopup(view.getActivity().getString(R.string.widget_disconnected));
     }
 
-//    @Subscribe
-//    public void onBeanInfoReceived(BeanInfoReceivedEvent event) {
-//    }
 
     public void initSearch() {
         if (!checkPermission()) {
             return;
         }
+        model.cleanBeans();
+        view.removeAllItems();
         view.hideSearchBtn();
         view.showRibbon();
         view.showRecyclerView();
         view.showSpinner();
 
+        final DiscoveryListener listener = new DiscoveryListener();
+        if (!BuildConfig.BUILD_TYPE.equals("mock")) {
+            BeanManager.getInstance().setScanTimeout(TIMEOUT);  // Timeout in seconds, optional, default is 30 seconds
+            BeanManager.getInstance().startDiscovery(listener);
+            return;
+        }
 
-        BeanManager.getInstance().setScanTimeout(TIMEOUT);  // Timeout in seconds, optional, default is 30 seconds
-        BeanManager.getInstance().startDiscovery(new DiscoveryListener());
 
+//TODO mock
+        com.globant.iot.drinkgadget.model.DeviceInfo info = new com.globant.iot.drinkgadget.model.DeviceInfo();
+        info.name = "botella Stella Artois";
+        info.address = "B4:99:4C:1E:BC:75";
+        info.status = 1;
+        view.addWidgetDetected(info);
+        info = new com.globant.iot.drinkgadget.model.DeviceInfo();
+        info.name = "botella Quilmes";
+        info.address = "B4:99:4C:1E:BC:75";
+        info.status = 0;
+        view.addWidgetDetected(info);
+        info = new com.globant.iot.drinkgadget.model.DeviceInfo();
+        info.name = "botella Heineken";
+        info.address = "B4:99:4C:1E:BC:75";
+        info.status = 0;
+        view.addWidgetDetected(info);
+        listener.onDiscoveryComplete();
     }
-
 }
+
