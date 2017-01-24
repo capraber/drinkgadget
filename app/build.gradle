@@ -20,6 +20,8 @@ android {
         debug {
             debuggable true
         }
+        mock {
+        }
     }
 }
 
