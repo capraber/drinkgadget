@@ -9,6 +9,7 @@ import com.globant.iot.drinkgadget.R;
 import com.globant.iot.drinkgadget.mvp.model.DrawerModel;
 import com.globant.iot.drinkgadget.mvp.view.DrawerView;
 import com.globant.iot.drinkgadget.utils.DrinkPreferences;
+import com.globant.iot.drinkgadget.utils.Utils;
 
 public class DrawerPresenter {
 
@@ -32,12 +33,11 @@ public class DrawerPresenter {
             @Override
             public void onProgressChanged(SeekBar seekBar, int i, boolean b) {
                 preferences.setNotificationTemperature((byte) i);
+                String seekbarValue = String.valueOf(i);
                 if (!preferences.isCelsius()) {
-                    i = DrawerView.FAHRENHEIT_MIN_VALUE + i;
-
+                    seekbarValue = String.valueOf(Utils.convertToFahrenheit((byte) i));
                 }
 
-                String seekbarValue = String.valueOf(i);
                 view.getNum().setText(seekbarValue);
             }
 
@@ -55,25 +55,23 @@ public class DrawerPresenter {
             @Override
             public void onCheckedChanged(RadioGroup group, int checkedId) {
                 // find which radio button is selected
+                int notificationTemperature = preferences.getNotificationTemperature();
                 if (checkedId == R.id.celsius) {
                     preferences.setCelsius(true);
-                    view.setSeekbarCelsius();
+                    view.getNum().setText(String.valueOf(notificationTemperature));
                 } else {
                     preferences.setCelsius(false);
-                    view.setSeekBarFahrenheit();
+                    view.getNum().setText(String.valueOf(Utils.convertToFahrenheit((byte) notificationTemperature)));
                 }
-
-                view.setSeekbarProgress(preferences.getNotificationTemperature());
+                view.setSeekbarProgress(notificationTemperature);
             }
 
         });
 
         int previousSelection = preferences.getNotificationTemperature();
         if (preferences.isCelsius()) {
-            view.setSeekbarCelsius();
             view.selectCelsiusRadioBtn();
         } else {
-            view.setSeekBarFahrenheit();
             view.selectFahrenheitRadioBtn();
         }
 

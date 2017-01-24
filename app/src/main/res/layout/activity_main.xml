@@ -37,67 +37,6 @@
         android:layout_height="wrap_content"
         android:visibility="gone"
         />
-    <at.grabner.circleprogress.CircleProgressView
-        android:id="@+id/circleViewBatteryLevel"
-        android:layout_width="100dp"
-        android:layout_height="100dp"
-        CircleProgressView:cpv_autoTextSize="true"
-        CircleProgressView:cpv_barWidth="15dp"
-        CircleProgressView:cpv_innerContourSize="0dp"
-        CircleProgressView:cpv_maxValue="100"
-        CircleProgressView:cpv_outerContourSize="0dp"
-        CircleProgressView:cpv_rimWidth="15dp"
-        CircleProgressView:cpv_seekMode="false"
-        CircleProgressView:cpv_showUnit="true"
-        CircleProgressView:cpv_textScale="1"
-        CircleProgressView:cpv_unit="%"
-        CircleProgressView:cpv_unitPosition="right_top"
-        CircleProgressView:cpv_unitScale="1"
-        CircleProgressView:cpv_value="10"
-        android:layout_marginTop="80dp"
-        android:layout_below="@+id/circleViewTemperature"
-        android:layout_centerHorizontal="true" />
-
-    <at.grabner.circleprogress.CircleProgressView
-        android:id="@+id/circleViewTemperature"
-        android:layout_width="150dp"
-        android:layout_height="150dp"
-        CircleProgressView:cpv_autoTextSize="true"
-        CircleProgressView:cpv_barWidth="35dp"
-        CircleProgressView:cpv_innerContourSize="0dp"
-        CircleProgressView:cpv_maxValue="100"
-        CircleProgressView:cpv_outerContourSize="0dp"
-        CircleProgressView:cpv_rimWidth="35dp"
-        CircleProgressView:cpv_seekMode="false"
-        CircleProgressView:cpv_showUnit="true"
-        CircleProgressView:cpv_textScale="1"
-        CircleProgressView:cpv_unit="°C"
-        CircleProgressView:cpv_unitPosition="right_top"
-        CircleProgressView:cpv_unitScale="1"
-        CircleProgressView:cpv_value="0"
-        android:layout_marginTop="40dp"
-        android:layout_centerHorizontal="true" />
-
-    <TextView
-        android:text="Temperature"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:id="@+id/textViewTemperature"
-        android:layout_below="@+id/circleViewTemperature"
-        android:layout_marginTop="10dp"
-        android:layout_centerHorizontal="true"
-        android:textSize="24sp"
-        android:textStyle="normal|bold" />
-
-    <TextView
-        android:text="Battery"
-        android:layout_width="wrap_content"
-        android:layout_height="wrap_content"
-        android:layout_below="@+id/circleViewBatteryLevel"
-        android:layout_centerHorizontal="true"
-        android:layout_marginTop="10dp"
-        android:textSize="20sp"
-        android:id="@+id/textViewBatteryLevel" />
 
     <android.support.design.widget.FloatingActionButton
         android:id="@+id/scanFloatingButton"

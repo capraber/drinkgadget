@@ -41,8 +41,6 @@ public class ScanPresenter {
     private void init() {
         beans.clear();
         view.hideSpinner();
-        view.hideTemperature();
-        view.hideBattery();
         notificationSent = false;
         checkPermission();
     }
@@ -152,10 +150,6 @@ public class ScanPresenter {
                 System.out.println("onConnected");
                 view.hideSpinner();
 
-                //enable info container (TBD)
-                view.showTemperature();
-                view.showBattery();
-
                 bean.readDeviceInfo(new Callback<DeviceInfo>() {
                     @Override
                     public void onResult(DeviceInfo deviceInfo) {
@@ -198,7 +192,8 @@ public class ScanPresenter {
                         rxIndex = 0;
                         byte temperature = rxData[0];
                         byte batteryLevel = rxData[1];
-                        updateViewInfo(temperature, batteryLevel);
+                        //FIXME send event for each bean
+                        //updateViewInfo(temperature, batteryLevel);
 
                         if (!notificationSent) {
                             if (temperature <= preferences.getNotificationTemperature()) {
@@ -234,12 +229,5 @@ public class ScanPresenter {
 
         // Assuming you are in an Activity, use 'this' for the context
         bean.connect(view.getActivity(), beanListener);
-    }
-
-    private void updateViewInfo(byte temperature, byte batteryLevel) {
-        view.setTemperature(temperature);
-        view.setBattery(batteryLevel);
-        view.setCircleViewTemperature(temperature);
-        view.setCircleViewBatteryLevel(batteryLevel);
     }
 }

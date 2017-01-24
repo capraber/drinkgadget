@@ -9,7 +9,9 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.globant.iot.drinkgadget.DrinkDialog;
 import com.globant.iot.drinkgadget.R;
+import com.globant.iot.drinkgadget.adapters.WidgetsDetectedAdapter.DrinkViewHolder;
 import com.globant.iot.drinkgadget.model.DeviceInfo;
 
 import java.util.ArrayList;
@@ -17,8 +19,9 @@ import java.util.List;
 
 import butterknife.BindView;
 import butterknife.ButterKnife;
+import butterknife.OnClick;
 
-public class WidgetsDetectedAdapter extends RecyclerView.Adapter<WidgetsDetectedAdapter.WidgetDetectedViewHolder> {
+public class WidgetsDetectedAdapter extends RecyclerView.Adapter<DrinkViewHolder> {
 
     final List<DeviceInfo> infos;
 
@@ -32,15 +35,16 @@ public class WidgetsDetectedAdapter extends RecyclerView.Adapter<WidgetsDetected
     }
 
     @Override
-    public WidgetDetectedViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
+    public DrinkViewHolder onCreateViewHolder(ViewGroup parent, int viewType) {
         final View view = LayoutInflater.from(parent.getContext()).inflate(R.layout.item_widget_detected, parent, false);
 
-        return new WidgetDetectedViewHolder(view);
+        return new DrinkViewHolder(view);
     }
 
     @Override
-    public void onBindViewHolder(WidgetDetectedViewHolder holder, int position) {
+    public void onBindViewHolder(DrinkViewHolder holder, int position) {
         final DeviceInfo deviceInfo = infos.get(position);
+        holder.setDrinkInfo(deviceInfo);
 
         holder.deviceName.setText(deviceInfo.name);
 
@@ -57,13 +61,25 @@ public class WidgetsDetectedAdapter extends RecyclerView.Adapter<WidgetsDetected
         return infos != null ? infos.size() : 0;
     }
 
-    static class WidgetDetectedViewHolder extends RecyclerView.ViewHolder {
+    static class DrinkViewHolder extends RecyclerView.ViewHolder {
         @BindView(R.id.device_name) TextView deviceName;
         @BindView(R.id.device_status) ImageView status;
+        DeviceInfo drinkInfo;
 
-        public WidgetDetectedViewHolder(View itemView) {
+        public DrinkViewHolder(View itemView) {
             super(itemView);
             ButterKnife.bind(this, itemView);
         }
+
+        public void setDrinkInfo(DeviceInfo drinkInfo) {
+            this.drinkInfo = drinkInfo;
+        }
+
+        @OnClick(R.id.device_status)
+        public void onImageClick(View view) {
+            //FIXME correct the temperature and battery level
+            new DrinkDialog(view.getContext(), drinkInfo, (byte) 4, (byte) 30).show();
+        }
+
     }
 }

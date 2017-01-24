@@ -17,8 +17,6 @@ import butterknife.ButterKnife;
 public class DrawerView extends ActivityView {
 
     private static final int CELSIUS_MAX_VALUE = 10;
-    private static final int FAHRENHEIT_MAX_VALUE = 50;
-    public static final int FAHRENHEIT_MIN_VALUE = 32;
     @BindView(R.id.drawerLayout) DrawerLayout drawerLayout;
     @BindView(R.id.temp_selected) TextView num;
     @BindView(R.id.version) TextView version;
@@ -52,18 +50,11 @@ public class DrawerView extends ActivityView {
         drawerToggle.syncState();
 
         version.setText(String.format(getActivity().getResources().getString(R.string.version), BuildConfig.VERSION_NAME));
+        seekbar.setMax(CELSIUS_MAX_VALUE);
     }
 
     public SeekBar getSeekbar() {
         return seekbar;
-    }
-
-    public void setSeekbarCelsius() {
-         seekbar.setMax(CELSIUS_MAX_VALUE);
-    }
-
-    public void setSeekBarFahrenheit() {
-        seekbar.setMax(FAHRENHEIT_MAX_VALUE - FAHRENHEIT_MIN_VALUE);
     }
 
     public void setSeekbarProgress(int value) {

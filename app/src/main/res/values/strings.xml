@@ -6,6 +6,8 @@
     <string name="ready_message">Your drink is ready! Enjoy it!</string>
     <string name="celsius">°C</string>
     <string name="fahrenheit">°F</string>
+    <string name="temp_celsius">%1$s °C</string>
+    <string name="temp_fahrenheit">%1$s °F</string>
     <string name="unit_of_temperature">Unit of temperature:</string>
     <string name="drawer_open">open</string>
     <string name="drawer_close">close</string>
@@ -15,5 +17,9 @@
     <string name="version">Version %1$s</string>
     <string name="error_bluetooth_message">Check that Bluetooth is enabled.</string>
     <string name="widgets_detected">Drinks detected</string>
+    <string name="battery">Battery</string>
+    <string name="back">Close</string>
+    <string name="temperature">Temperature</string>
+    <string name="percentage">%1$s %%</string>
 
 </resources>
