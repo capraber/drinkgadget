@@ -56,35 +56,10 @@ public class ConnectBeanListener implements BeanListener {
         if (data == null || data.length < 2) {
             return;
         }
-        final String temperature = Byte.toString(data[0]);
-        final String battery = Byte.toString(data[1]);
+        final byte temperature = data[0];
+        final byte battery = data[1];
 
-        BusProvider.getInstance().post(new BeanInfoReceivedEvent(bean, temperature, battery));
-
-//        for (int c = 0; c < data.length; c++) {
-//            rxData[rxIndex++] = data[c];
-//            if (2 == rxIndex) {
-//                //get temperature
-//                System.out.println("Temperature: " + Byte.toString(rxData[0]));
-//                //get battery level %
-//                System.out.println("Battery: " + Byte.toString(rxData[1]));
-//                rxIndex = 0;
-//                byte temperature = rxData[0];
-//                byte batteryLevel = rxData[1];
-//                updateViewInfo(temperature, batteryLevel);
-//
-//                if (!notificationSent) {
-//                    if (temperature <= preferences.getNotificationTemperature()) {
-//                        Notifications.showNotification(view.getContext(), view.getActivity().getString(R.string.drink_widget),
-//                                view.getActivity().getString(R.string.ready_message));
-//                        notificationSent = true;
-//                    }
-//                }
-//                break;
-//            }
-//        }
-
-
+        BusProvider.getInstance().post(new BeanInfoReceivedEvent(bean.getDevice().getAddress(), temperature, battery));
     }
 
     @Override

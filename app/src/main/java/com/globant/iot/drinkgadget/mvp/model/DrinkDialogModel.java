@@ -7,10 +7,15 @@ public class DrinkDialogModel {
     private byte temperature;
     private byte batteryLevel;
 
-    public DrinkDialogModel(DeviceInfo device, byte temperature, byte batteryLevel) {
+    public DrinkDialogModel(DeviceInfo device) {
         this.device = device;
-        this.temperature = temperature;
-        this.batteryLevel = batteryLevel;
+        this.temperature = 0;
+        this.batteryLevel = 0;
+    }
+
+
+    public boolean isValid(String address) {
+        return device.address.equals(address);
     }
 
     public DeviceInfo getDevice() {
@@ -21,7 +26,15 @@ public class DrinkDialogModel {
         return temperature;
     }
 
+    public void setTemperature(byte temperature) {
+        this.temperature = temperature;
+    }
+
     public byte getBatteryLevel() {
         return batteryLevel;
+    }
+
+    public void setBatteryLevel(byte batteryLevel) {
+        this.batteryLevel = batteryLevel;
     }
 }

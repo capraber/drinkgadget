@@ -61,6 +61,11 @@ public class WidgetsDetectedAdapter extends RecyclerView.Adapter<DrinkViewHolder
         return infos != null ? infos.size() : 0;
     }
 
+    public void removeAllItems() {
+        infos.clear();
+        notifyDataSetChanged();
+    }
+
     static class DrinkViewHolder extends RecyclerView.ViewHolder {
         @BindView(R.id.device_name) TextView deviceName;
         @BindView(R.id.device_status) ImageView status;
@@ -77,8 +82,7 @@ public class WidgetsDetectedAdapter extends RecyclerView.Adapter<DrinkViewHolder
 
         @OnClick(R.id.device_status)
         public void onImageClick(View view) {
-            //FIXME correct the temperature and battery level
-            new DrinkDialog(view.getContext(), drinkInfo, (byte) 4, (byte) 30).show();
+            new DrinkDialog(view.getContext(), drinkInfo).show();
         }
 
     }

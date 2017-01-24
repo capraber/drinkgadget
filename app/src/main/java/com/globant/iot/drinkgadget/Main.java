@@ -20,7 +20,7 @@ public class Main extends DrawerBaseActivity {
 
         ButterKnife.bind(this);
         if (presenter == null) {
-            presenter = new ScanPresenter(new ScanModel(), new ScanView(this), preferences);
+            presenter = new ScanPresenter(new ScanModel(), new ScanView(this));
         }
     }
 

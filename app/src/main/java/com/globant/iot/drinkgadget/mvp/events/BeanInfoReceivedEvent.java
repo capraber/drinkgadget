@@ -1,16 +1,14 @@
 package com.globant.iot.drinkgadget.mvp.events;
 
 
-import com.punchthrough.bean.sdk.Bean;
-
 public class BeanInfoReceivedEvent {
 
-    public Bean bean;
-    public String temperature;
-    public String battery;
+    public String address;
+    public byte temperature;
+    public byte battery;
 
-    public BeanInfoReceivedEvent(Bean bean, String temperature, String battery) {
-        this.bean = bean;
+    public BeanInfoReceivedEvent(String address, byte temperature, byte battery) {
+        this.address = address;
         this.temperature = temperature;
         this.battery = battery;
     }
