@@ -7,6 +7,8 @@ import com.globant.iot.drinkgadget.utils.DrinkPreferences;
 import com.squareup.otto.Subscribe;
 
 public class DrinkDialogPresenter {
+    public static final int TEN = 10;
+    public static final int TWENTY = 20;
     private DrinkDialogView view;
     private DrinkDialogModel model;
     private DrinkPreferences preferences;
@@ -24,8 +26,28 @@ public class DrinkDialogPresenter {
         } else {
             view.setCircleViewTemperatureFahrenheit(model.getTemperature());
         }
+        setTemperatureColor();
 
         view.setCircleViewBatteryLevel(model.getBatteryLevel());
+        setBatteryColor();
+    }
+
+    private void setTemperatureColor() {
+        if (model.getTemperature() > TWENTY) {
+            view.setTemperatureColorRed();
+        } else if (model.getTemperature() > TEN) {
+            view.setTemperatureColorBlue();
+        } else {
+            view.setTemperatureColorBlue();
+        }
+    }
+
+    private void setBatteryColor() {
+        if (model.getBatteryLevel() > TEN) {
+            view.setTemperatureColorRed();
+        } else {
+            view.setBatteryColorGreen();
+        }
     }
 
     @Subscribe

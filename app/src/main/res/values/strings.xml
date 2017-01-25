@@ -2,8 +2,10 @@
     <string name="app_name">Drink Gadget</string>
     <string name="error_message">No widgets detected.</string>
     <string name="widget_disconnected">Widget disconnected</string>
-    <string name="drink_widget">Drink Widget</string>
+    <string name="ready_title">I am cold!</string>
     <string name="ready_message">Your drink is ready! Enjoy it!</string>
+    <string name="frozen_title">Let me out!</string>
+    <string name="frozen_message">Your drink is near to be frozen! Please take it out!</string>
     <string name="celsius">°C</string>
     <string name="fahrenheit">°F</string>
     <string name="temp_celsius">%1$s °C</string>

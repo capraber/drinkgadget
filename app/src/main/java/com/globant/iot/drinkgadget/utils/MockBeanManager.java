@@ -7,8 +7,8 @@ import com.globant.iot.drinkgadget.mvp.events.BeanInfoReceivedEvent;
 public class MockBeanManager {
     Handler handler;
     String address;
-    int temperature = 20;
-    int battery = 100;
+    int temperature = 30;
+    int battery = 50;
     private Runnable runnableTask = new Runnable() {
 
 

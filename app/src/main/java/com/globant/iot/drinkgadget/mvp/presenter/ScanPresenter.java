@@ -20,7 +20,7 @@ import java.util.List;
 
 public class ScanPresenter {
 
-    public static final int TIMEOUT = 5;
+    private static final int TIMEOUT = 5;
     boolean notificationSent;
     private ScanModel model;
     private ScanView view;
@@ -109,18 +109,22 @@ public class ScanPresenter {
         }
 
 
-//TODO mock
-        com.globant.iot.drinkgadget.model.DeviceInfo info = new com.globant.iot.drinkgadget.model.DeviceInfo();
+        //TODO mock
+        mockData(listener);
+    }
+
+    private void mockData(DiscoveryListener listener) {
+        DeviceInfo info = new DeviceInfo();
         info.name = "botella Stella Artois";
         info.address = "B4:99:4C:1E:BC:75";
         info.status = 1;
         view.addWidgetDetected(info);
-        info = new com.globant.iot.drinkgadget.model.DeviceInfo();
+        info = new DeviceInfo();
         info.name = "botella Quilmes";
         info.address = "B4:99:4C:1E:BC:75";
         info.status = 0;
         view.addWidgetDetected(info);
-        info = new com.globant.iot.drinkgadget.model.DeviceInfo();
+        info = new DeviceInfo();
         info.name = "botella Heineken";
         info.address = "B4:99:4C:1E:BC:75";
         info.status = 0;

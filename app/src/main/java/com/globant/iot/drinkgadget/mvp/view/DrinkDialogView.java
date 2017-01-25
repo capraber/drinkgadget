@@ -71,6 +71,32 @@ public class DrinkDialogView extends DialogView {
         mCircleViewTemperature.setValue(temperature);
     }
 
+    public void setTemperatureColorBlue() {
+        mCircleViewTemperature.setBarColor(getContext().getResources().getColor(R.color.colorPrimary),
+                getContext().getResources().getColor(R.color.colorAccent));
+    }
+
+    public void setTemperatureColorYellow() {
+        mCircleViewTemperature.setBarColor(getContext().getResources().getColor(R.color.yellow),
+                getContext().getResources().getColor(R.color.colorAccent));
+    }
+
+    public void setTemperatureColorRed() {
+        mCircleViewTemperature.setBarColor(getContext().getResources().getColor(R.color.red),
+                getContext().getResources().getColor(R.color.colorAccent));
+    }
+
+
+    public void setBatteryColorGreen() {
+        mCircleViewBatteryLevel.setBarColor(getContext().getResources().getColor(R.color.green),
+                getContext().getResources().getColor(R.color.colorAccent));
+    }
+
+    public void setBatteryColorRed() {
+        mCircleViewBatteryLevel.setBarColor(getContext().getResources().getColor(R.color.red),
+                getContext().getResources().getColor(R.color.colorAccent));
+    }
+
     public void setCircleViewBatteryLevel(byte batteryLevel) {
         mCircleViewBatteryLevel.setValue(batteryLevel);
     }

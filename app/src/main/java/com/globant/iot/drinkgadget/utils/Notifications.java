@@ -1,35 +1,65 @@
 package com.globant.iot.drinkgadget.utils;
 
-import android.app.NotificationManager;
+import android.app.Notification;
 import android.app.PendingIntent;
 import android.content.Context;
 import android.content.Intent;
-import android.support.v4.app.NotificationCompat;
+import android.support.annotation.DrawableRes;
+import android.support.annotation.StringRes;
+import android.support.v4.app.NotificationCompat.Builder;
+import android.support.v4.app.NotificationManagerCompat;
 
 import com.globant.iot.drinkgadget.Main;
 import com.globant.iot.drinkgadget.R;
 
-public class Notifications {
+import java.util.concurrent.atomic.AtomicInteger;
+
+import static android.support.v4.app.NotificationCompat.PRIORITY_DEFAULT;
+import static android.support.v4.app.NotificationCompat.PRIORITY_HIGH;
+
+
+public final class Notifications {
+
+    private static final AtomicInteger ATOMIC_INTEGER = new AtomicInteger(0);
+    private static final int VIBRATE = 1000;
 
     private Notifications() {
         // Prevent instantiation
     }
 
-    public static void showNotification(Context context, String title, String message) {
-        NotificationCompat.Builder builder =
-                new NotificationCompat.Builder(context)
-                        .setSmallIcon(R.drawable.ic_fingerprint_black_24dp)
-                        .setContentTitle(title)
-                        .setVibrate(new long[] {1000, 1000, 1000, 1000, 1000 })
-                        .setContentText(message);
+    private static int getID() {
+        return ATOMIC_INTEGER.incrementAndGet();
+    }
+
+    public static void showNotificationAlmostFrozen(Context context) {
+        showNotification(context, R.string.frozen_title, R.string.frozen_message, R.drawable.ic_danger, PRIORITY_HIGH);
+    }
+
+    public static void showNotificationDrinkReady(Context context) {
+        showNotification(context, R.string.ready_title, R.string.ready_message, R.drawable.ic_ready, PRIORITY_DEFAULT);
+    }
+
+    private static void showNotification(Context context, @StringRes int title, @StringRes int message, @DrawableRes int icon,
+                                         int priority) {
 
         Intent notificationIntent = new Intent(context, Main.class);
         PendingIntent contentIntent = PendingIntent.getActivity(context, 0, notificationIntent,
                 PendingIntent.FLAG_UPDATE_CURRENT);
-        builder.setContentIntent(contentIntent);
+        Notification builder =
+                new Builder(context)
+                .setSmallIcon(icon)
+                .setContentTitle(context.getString(title))
+                .setContentText(context.getString(message))
+                .setVibrate(new long[] {VIBRATE, VIBRATE, VIBRATE, VIBRATE, VIBRATE })
+                .setOngoing(false)
+                .setShowWhen(true)
+                .setAutoCancel(true)
+                .setPriority(priority)
+                .setContentIntent(contentIntent)
+                .build();
 
-        // Add as notification
-        NotificationManager manager = (NotificationManager) context.getSystemService(Context.NOTIFICATION_SERVICE);
-        manager.notify(0, builder.build());
+        NotificationManagerCompat notificationManager =
+                NotificationManagerCompat.from(context);
+        notificationManager.notify(getID(), builder);
     }
 }
