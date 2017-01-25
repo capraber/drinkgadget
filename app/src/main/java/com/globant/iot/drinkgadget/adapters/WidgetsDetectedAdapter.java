@@ -9,10 +9,12 @@ import android.view.ViewGroup;
 import android.widget.ImageView;
 import android.widget.TextView;
 
+import com.globant.iot.drinkgadget.BuildConfig;
 import com.globant.iot.drinkgadget.DrinkDialog;
 import com.globant.iot.drinkgadget.R;
 import com.globant.iot.drinkgadget.adapters.WidgetsDetectedAdapter.DrinkViewHolder;
 import com.globant.iot.drinkgadget.model.DeviceInfo;
+import com.globant.iot.drinkgadget.utils.MockBeanManager;
 
 import java.util.ArrayList;
 import java.util.List;
@@ -32,6 +34,10 @@ public class WidgetsDetectedAdapter extends RecyclerView.Adapter<DrinkViewHolder
     public void add(final DeviceInfo info) {
         infos.add(info);
         notifyItemInserted(infos.size() - 1);
+        if (BuildConfig.BUILD_TYPE.equals("mock")) {
+            new MockBeanManager().start(info.address);
+        }
+
     }
 
     @Override
@@ -48,11 +54,18 @@ public class WidgetsDetectedAdapter extends RecyclerView.Adapter<DrinkViewHolder
 
         holder.deviceName.setText(deviceInfo.name);
 
-        holder.status.setColorFilter(ContextCompat.getColor(holder.status.getContext(),
-                deviceInfo.status == 1
-                        ? R.color.green
-                        : R.color.yellow
-        ));
+        int color = -1;
+        if (deviceInfo.temperature > 20) {
+            color = R.color.red;
+        } else if (deviceInfo.temperature > 10) {
+            color = R.color.yellow;
+        } else if (deviceInfo.temperature < 10 && deviceInfo.temperature > 0) {
+            color = R.color.blue;
+        }
+
+        if (color != -1) {
+            holder.status.setColorFilter(ContextCompat.getColor(holder.status.getContext(), color));
+        }
 
     }
 
@@ -64,6 +77,20 @@ public class WidgetsDetectedAdapter extends RecyclerView.Adapter<DrinkViewHolder
     public void removeAllItems() {
         infos.clear();
         notifyDataSetChanged();
+    }
+
+    public void update(String address, byte temperature, byte battery) {
+        int position = 0;
+        for (DeviceInfo info : infos) {
+            if (info.address.equals(address)) {
+                info.temperature = temperature;
+                info.battery = battery;
+                notifyItemChanged(position);
+                return;
+            }
+            position++;
+        }
+
     }
 
     static class DrinkViewHolder extends RecyclerView.ViewHolder {

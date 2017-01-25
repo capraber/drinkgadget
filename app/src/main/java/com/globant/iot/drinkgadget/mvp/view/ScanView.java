@@ -90,4 +90,8 @@ public class ScanView extends ActivityView {
     public void removeAllItems() {
         adapter.removeAllItems();
     }
+
+    public void update(String address, byte temperature, byte battery) {
+        adapter.update(address, temperature, battery);
+    }
 }

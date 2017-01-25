@@ -8,6 +8,8 @@ public class DeviceInfo {
     public String name;
     public String address;
     public int status;
+    public byte temperature;
+    public byte battery;
 
 
     public static class Builder {
