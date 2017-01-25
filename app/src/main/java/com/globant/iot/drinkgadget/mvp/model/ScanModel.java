@@ -8,10 +8,14 @@ import android.content.pm.PackageManager;
 import android.support.v4.content.ContextCompat;
 
 import com.globant.iot.drinkgadget.listeners.ConnectBeanListener;
+import com.globant.iot.drinkgadget.utils.DrinkPreferences;
 import com.punchthrough.bean.sdk.Bean;
 
 import java.util.ArrayList;
 import java.util.List;
+
+import static android.content.Context.MODE_PRIVATE;
+import static com.globant.iot.drinkgadget.DrawerBaseActivity.DRINK_PREFERENCES;
 
 public class ScanModel {
 
@@ -40,7 +44,8 @@ public class ScanModel {
     }
 
     public void connect(final Activity activity, final Bean bean) {
-        bean.connect(activity, new ConnectBeanListener(bean));
+        bean.connect(activity, new ConnectBeanListener(bean, activity,
+                new DrinkPreferences(activity.getSharedPreferences(DRINK_PREFERENCES, MODE_PRIVATE))));
     }
 
 

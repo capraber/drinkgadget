@@ -11,6 +11,7 @@ import com.globant.iot.drinkgadget.mvp.view.DrinkDialogView;
 import com.globant.iot.drinkgadget.utils.BusProvider;
 import com.globant.iot.drinkgadget.utils.DrinkPreferences;
 import com.globant.iot.drinkgadget.utils.MockBeanManager;
+import com.globant.iot.drinkgadget.utils.Notifications;
 
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -38,7 +39,8 @@ public class DrinkDialog extends Dialog {
         presenter = new DrinkDialogPresenter(new DrinkDialogView(this), new DrinkDialogModel(device),
                 new DrinkPreferences(getContext().getSharedPreferences(DRINK_PREFERENCES, MODE_PRIVATE)));
         if (BuildConfig.BUILD_TYPE.equals("mock")) {
-            new MockBeanManager().start(device.address);
+            Notifications.resetNotifications();
+            new MockBeanManager().start(device.address, getContext());
         }
 
     }

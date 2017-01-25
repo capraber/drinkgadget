@@ -12,6 +12,7 @@ import android.support.v4.app.NotificationManagerCompat;
 import com.globant.iot.drinkgadget.Main;
 import com.globant.iot.drinkgadget.R;
 
+import java.util.HashMap;
 import java.util.concurrent.atomic.AtomicInteger;
 
 import static android.support.v4.app.NotificationCompat.PRIORITY_DEFAULT;
@@ -22,6 +23,8 @@ public final class Notifications {
 
     private static final AtomicInteger ATOMIC_INTEGER = new AtomicInteger(0);
     private static final int VIBRATE = 1000;
+    private static HashMap<String, String> drinksReady = new HashMap<>();
+    private static HashMap<String, String> drinksAlmostFrozen = new HashMap<>();
 
     private Notifications() {
         // Prevent instantiation
@@ -31,11 +34,26 @@ public final class Notifications {
         return ATOMIC_INTEGER.incrementAndGet();
     }
 
-    public static void showNotificationAlmostFrozen(Context context) {
+    public static void resetNotifications() {
+        drinksReady.clear();
+        drinksAlmostFrozen.clear();
+    }
+
+    public static void showNotificationAlmostFrozen(Context context, String address) {
+        //only send one notification
+        if (drinksAlmostFrozen.containsKey(address)) {
+            return;
+        }
+        drinksAlmostFrozen.put(address, address);
         showNotification(context, R.string.frozen_title, R.string.frozen_message, R.drawable.ic_danger, PRIORITY_HIGH);
     }
 
-    public static void showNotificationDrinkReady(Context context) {
+    public static void showNotificationDrinkReady(Context context, String address) {
+        //only send one notification
+        if (drinksReady.containsKey(address)) {
+            return;
+        }
+        drinksReady.put(address, address);
         showNotification(context, R.string.ready_title, R.string.ready_message, R.drawable.ic_ready, PRIORITY_DEFAULT);
     }
 

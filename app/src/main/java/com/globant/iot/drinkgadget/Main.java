@@ -6,6 +6,7 @@ import com.globant.iot.drinkgadget.mvp.model.ScanModel;
 import com.globant.iot.drinkgadget.mvp.presenter.ScanPresenter;
 import com.globant.iot.drinkgadget.mvp.view.ScanView;
 import com.globant.iot.drinkgadget.utils.BusProvider;
+import com.globant.iot.drinkgadget.utils.Notifications;
 
 import butterknife.ButterKnife;
 import butterknife.OnClick;
@@ -48,6 +49,8 @@ public class Main extends DrawerBaseActivity {
 
     @OnClick(R.id.scanFloatingButton)
     public void onButonSearchClick() {
+        //FIXME reset notifications
+        Notifications.resetNotifications();
         presenter.initSearch();
     }
 }

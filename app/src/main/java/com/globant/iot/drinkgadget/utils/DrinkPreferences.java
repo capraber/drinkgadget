@@ -5,8 +5,10 @@ import android.content.SharedPreferences;
 public class DrinkPreferences {
 
     private static final String CELSIUS_KEY = "celsius_key";
+    private static final String NOTIFICATION_FREEZE_KEY = "freeze_key";
     private static final String NOTIFICATION_TEMPERATURE_KEY = "notification_temperature_key";
     private static final byte TEMPERATURE_SELECTED = 4;
+    private static final byte FREEZE_TEMPERATURE_SELECTED = 0;
 
     private SharedPreferences preferences;
 
@@ -31,8 +33,12 @@ public class DrinkPreferences {
         return preferences.getInt(NOTIFICATION_TEMPERATURE_KEY, TEMPERATURE_SELECTED);
     }
 
-    public void removeNotificationTemperature() {
-        preferences.edit().remove(NOTIFICATION_TEMPERATURE_KEY).apply();
+
+    public void setNotificationFreezeTemperature(byte temperature) {
+        preferences.edit().putInt(NOTIFICATION_TEMPERATURE_KEY, temperature).apply();
     }
 
+    public int getNotificationFreezeTemperature() {
+        return preferences.getInt(NOTIFICATION_FREEZE_KEY, FREEZE_TEMPERATURE_SELECTED);
+    }
 }

@@ -84,7 +84,7 @@ public class ScanView extends ActivityView {
     }
 
     public void addWidgetDetected(final DeviceInfo info) {
-        adapter.add(info);
+        adapter.add(info, getContext());
     }
 
     public void removeAllItems() {

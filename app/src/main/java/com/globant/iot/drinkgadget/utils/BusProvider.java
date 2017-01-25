@@ -2,7 +2,7 @@ package com.globant.iot.drinkgadget.utils;
 
 import com.squareup.otto.Bus;
 
-public class BusProvider {
+public final class BusProvider {
     private static final Bus BUS_INSTANCE = new MainPostingBus();
 
     private BusProvider() {

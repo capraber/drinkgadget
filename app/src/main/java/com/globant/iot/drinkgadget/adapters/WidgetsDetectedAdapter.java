@@ -1,6 +1,7 @@
 package com.globant.iot.drinkgadget.adapters;
 
 
+import android.content.Context;
 import android.support.v4.content.ContextCompat;
 import android.support.v7.widget.RecyclerView;
 import android.view.LayoutInflater;
@@ -23,6 +24,9 @@ import butterknife.BindView;
 import butterknife.ButterKnife;
 import butterknife.OnClick;
 
+import static com.globant.iot.drinkgadget.utils.Utils.TEN;
+import static com.globant.iot.drinkgadget.utils.Utils.TWENTY;
+
 public class WidgetsDetectedAdapter extends RecyclerView.Adapter<DrinkViewHolder> {
 
     final List<DeviceInfo> infos;
@@ -31,11 +35,11 @@ public class WidgetsDetectedAdapter extends RecyclerView.Adapter<DrinkViewHolder
         this.infos = new ArrayList<>();
     }
 
-    public void add(final DeviceInfo info) {
+    public void add(final DeviceInfo info, Context context) {
         infos.add(info);
         notifyItemInserted(infos.size() - 1);
         if (BuildConfig.BUILD_TYPE.equals("mock")) {
-            new MockBeanManager().start(info.address);
+            new MockBeanManager().start(info.address, context);
         }
 
     }
@@ -55,11 +59,11 @@ public class WidgetsDetectedAdapter extends RecyclerView.Adapter<DrinkViewHolder
         holder.deviceName.setText(deviceInfo.name);
 
         int color = -1;
-        if (deviceInfo.temperature > 20) {
+        if (deviceInfo.temperature > TWENTY) {
             color = R.color.red;
-        } else if (deviceInfo.temperature > 10) {
+        } else if (deviceInfo.temperature > TEN) {
             color = R.color.yellow;
-        } else if (deviceInfo.temperature < 10 && deviceInfo.temperature > 0) {
+        } else if (deviceInfo.temperature < TEN && deviceInfo.temperature > 0) {
             color = R.color.blue;
         }
 
