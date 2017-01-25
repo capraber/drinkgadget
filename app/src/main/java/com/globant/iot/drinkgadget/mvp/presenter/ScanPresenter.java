@@ -9,6 +9,7 @@ import com.globant.iot.drinkgadget.model.DeviceInfo;
 import com.globant.iot.drinkgadget.mvp.events.BeanConnectedEvent;
 import com.globant.iot.drinkgadget.mvp.events.BeanDisconnectedEvent;
 import com.globant.iot.drinkgadget.mvp.events.BeanDiscoveredEvent;
+import com.globant.iot.drinkgadget.mvp.events.BeanInfoReceivedEvent;
 import com.globant.iot.drinkgadget.mvp.events.DiscoveryCompleteEvent;
 import com.globant.iot.drinkgadget.mvp.model.ScanModel;
 import com.globant.iot.drinkgadget.mvp.view.ScanView;
@@ -89,6 +90,11 @@ public class ScanPresenter {
         view.showPopup(view.getActivity().getString(R.string.widget_disconnected));
     }
 
+    @Subscribe
+    public void onBeanInfoReceived(BeanInfoReceivedEvent event) {
+        view.update(event.address, event.temperature, event.battery);
+
+    }
 
     public void initSearch() {
         if (!checkPermission()) {
@@ -116,17 +122,17 @@ public class ScanPresenter {
     private void mockData(DiscoveryListener listener) {
         DeviceInfo info = new DeviceInfo();
         info.name = "botella Stella Artois";
-        info.address = "B4:99:4C:1E:BC:75";
+        info.address = "B4:99:4C:1E:BC:71";
         info.status = 1;
         view.addWidgetDetected(info);
         info = new DeviceInfo();
         info.name = "botella Quilmes";
-        info.address = "B4:99:4C:1E:BC:75";
+        info.address = "B4:99:4C:1E:BC:72";
         info.status = 0;
         view.addWidgetDetected(info);
         info = new DeviceInfo();
         info.name = "botella Heineken";
-        info.address = "B4:99:4C:1E:BC:75";
+        info.address = "B4:99:4C:1E:BC:73";
         info.status = 0;
         view.addWidgetDetected(info);
         listener.onDiscoveryComplete();
